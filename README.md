@@ -2,6 +2,8 @@
 
 **An autonomous multi-agent production company, in a box — built for the [Agentic Cinema hackathon](https://agentic-cinema.devpost.com/), Parallel track.**
 
+**Live on Google Cloud (Cloud Run):** https://anansi-studios-538522341838.us-central1.run.app — deployed via `adk deploy cloud_run`, running the real ADK agent server (verify with `curl .../list-apps` → `["studio"]`).
+
 Anansi Studios takes a story seed, writes and critiques a short comic script, generates a comic in an authentic Caribbean folklore voice, "launches" it, and then — using [Parallel](https://parallel.ai)'s live web search — grounds its greenlight-to-movie decision in a *real* trend signal instead of a manually entered popularity number. This repo is the first working slice of a much larger vision: an AI-native studio that discovers, tests, and greenlights Caribbean-rooted IP before a single dollar of real production budget is spent on it.
 
 Built end-to-end in a single ~3-hour session against a hard hackathon deadline. See [`docs/scope.md`](docs/scope.md) and [`process-notes.md`](process-notes.md) for the full, unedited planning trail — including the scope cuts made under time pressure.
