@@ -15,7 +15,7 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
-from studio.agents import root_agent
+from studio.agent import root_agent
 from studio.config import MOCK, GOOGLE_API_KEY, PARALLEL_API_KEY
 
 APP_NAME = "anansi_studio"

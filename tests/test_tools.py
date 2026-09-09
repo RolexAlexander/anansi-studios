@@ -10,7 +10,7 @@ not just that it doesn't crash.
 import unittest
 from unittest.mock import MagicMock, patch
 
-from studio import tools
+from studio import tools  # noqa: F401 -- ensures studio/__init__.py (which imports agent) loads cleanly too
 
 
 class TestParallelTrendSearch(unittest.TestCase):
