@@ -92,6 +92,13 @@ This is a deliberately honest accounting, not a sales pitch — cut under a real
 - **An evolving virality-test rubric.** Today the critic runs one fixed rubric; the vision is a rubric that updates based on which past greenlights actually succeeded.
 - **Real publishing to a third-party platform.** "Launch" today means writing artifacts to `output/`; the vision is publishing to an actual open-source comics site or similar.
 
+## Documentation
+
+- [docs/architecture.md](docs/architecture.md) — technical detail: file-by-file breakdown, why each design decision was made, deployment specifics.
+- [docs/roadmap.md](docs/roadmap.md) — the full original vision, phase by phase, beyond what's built today.
+- [docs/scope.md](docs/scope.md) and [process-notes.md](process-notes.md) — the unedited planning trail, including the real-time cuts made under the hackathon deadline.
+- [docs/demo-script.md](docs/demo-script.md) / [docs/devpost-submission.md](docs/devpost-submission.md) — submission materials.
+
 ## License
 
 MIT — see [`LICENSE`](LICENSE).
