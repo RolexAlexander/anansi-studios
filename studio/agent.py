@@ -17,7 +17,7 @@ Pipeline order:
 from google.adk.agents import Agent, LoopAgent, SequentialAgent
 
 from studio.config import TEXT_MODEL, THEMES
-from studio.tools import approve_script, generate_panel_image, parallel_trend_search
+from studio.tools import approve_script, combine_comic_page, generate_panel_image, parallel_trend_search
 
 _THEME_MENU = "\n".join(f"- {t['name']}: {t['mood']}" for t in THEMES)
 
@@ -108,17 +108,24 @@ composer_agent = Agent(
         "You are the studio's art composer. You have:\n"
         "Characters and panels (JSON): {characters_and_scenes}\n"
         "Chosen visual theme: {theme_choice}\n\n"
-        "For EVERY panel in the JSON, call generate_panel_image once. Build "
-        "each prompt by combining: the panel's action and dialogue, the "
-        "FULL appearance description (verbatim) of every character present "
-        "in that panel so they stay visually consistent across panels, and "
-        "the chosen theme's mood/palette. Use panel_number as the "
-        "panel_number argument.\n\n"
-        "After all calls, respond with a JSON list summarizing each panel: "
-        '[{{"panel_number": 1, "path": "...", "prompt_used": "..."}}, ...] '
-        "using the exact paths returned by the tool."
+        "For EVERY panel in the JSON, call generate_panel_image once, in "
+        "panel order. Build each prompt by combining: the panel's action, "
+        "the FULL appearance description (verbatim) of every character "
+        "present in that panel so they stay visually consistent across "
+        "panels, and the chosen theme's mood/palette -- do NOT ask the "
+        "image itself to render dialogue text. Separately, pass that "
+        "panel's caption_or_dialogue text as the `caption` argument so it "
+        "can be baked on afterward when text mode is enabled. Use "
+        "panel_number as the panel_number argument.\n\n"
+        "After all panel calls succeed, call combine_comic_page ONCE with "
+        "the ordered list of panel image paths returned by those calls, to "
+        "produce a single combined comic page.\n\n"
+        "Finally, respond with a JSON object summarizing everything: "
+        '{{"panels": [{{"panel_number": 1, "path": "...", "prompt_used": '
+        '"..."}}, ...], "comic_page_path": "..."}} using the exact paths '
+        "returned by the tools."
     ),
-    tools=[generate_panel_image],
+    tools=[generate_panel_image, combine_comic_page],
     output_key="panels_manifest",
 )
 

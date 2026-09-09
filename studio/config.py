@@ -9,6 +9,11 @@ GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "")
 PARALLEL_API_KEY = os.environ.get("PARALLEL_API_KEY", "")
 MOCK = os.environ.get("STUDIO_MOCK", "0") == "1"
 
+# Off by default -- preserves the clean, text-free panel art. Set
+# STUDIO_WITH_TEXT=1 to overlay each panel's caption/dialogue as a comic
+# caption box baked into the image.
+WITH_TEXT = os.environ.get("STUDIO_WITH_TEXT", "0") == "1"
+
 TEXT_MODEL = "gemini-flash-latest"
 # Note: plain Gemini Developer API keys (not Vertex AI project auth) don't have
 # access to the separate Imagen `generate_images` endpoint -- confirmed via a

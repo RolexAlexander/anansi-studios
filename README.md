@@ -64,7 +64,7 @@ cp .env.example .env   # fill in GOOGLE_API_KEY and PARALLEL_API_KEY
 python main.py "Anansi tricks the wind spirit into a race, comedic"
 ```
 
-Generated comic panels land in `output/`. Set `STUDIO_MOCK=1` in `.env` to run the tool layer in placeholder mode (useful for structural testing without spending API budget — the ADK agents themselves still require a real `GOOGLE_API_KEY` to run at all, since ADK calls Gemini directly).
+Generated comic panels land in `output/`, plus a combined `output/comic_page.png` stitching all panels into one page. Set `STUDIO_MOCK=1` in `.env` to run the tool layer in placeholder mode (useful for structural testing without spending API budget — the ADK agents themselves still require a real `GOOGLE_API_KEY` to run at all, since ADK calls Gemini directly). Set `STUDIO_WITH_TEXT=1` to bake each panel's dialogue/caption onto the image as a comic caption box (off by default -- clean, text-free panel art).
 
 ### Testing without spending anything
 
