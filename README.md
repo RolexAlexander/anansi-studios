@@ -2,10 +2,6 @@
   <img src="assets/banner.png" alt="Anansi Studios banner" width="100%">
 </p>
 
-<p align="center">
-  <img src="assets/logo.jpg" alt="Anansi Studios logo" width="140">
-</p>
-
 # Anansi Studios
 
 **An autonomous multi-agent production company, in a box — built for the [Agentic Cinema hackathon](https://agentic-cinema.devpost.com/), Parallel track.**
