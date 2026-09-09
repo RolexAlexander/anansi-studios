@@ -8,49 +8,35 @@ verified for free before spending real API budget.
 """
 
 import math
-import textwrap
 
 import requests
 from google import genai
 from google.adk.tools import ToolContext
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 from studio.config import GOOGLE_API_KEY, IMAGE_MODEL, MOCK, OUTPUT_DIR, PARALLEL_API_KEY, WITH_TEXT
 
 
-def _load_font(size: int) -> ImageFont.ImageFont:
-    for candidate in ("arialbd.ttf", "arial.ttf", "DejaVuSans-Bold.ttf"):
-        try:
-            return ImageFont.truetype(candidate, size)
-        except Exception:  # noqa: BLE001 - font not found, try next
-            continue
-    return ImageFont.load_default()
-
-
-def _overlay_caption(image_path, caption: str) -> None:
-    """Bake a comic-style caption box onto the bottom of an image, in place."""
+def _with_bubble_instructions(prompt: str, caption: str) -> str:
+    """Ask the image model itself to render clean comic lettering -- no PIL
+    post-processing. Gemini's native image models can render legible text
+    directly when instructed clearly, which looks far more like a real
+    comic page than a bar drawn on afterward.
+    """
     if not caption:
-        return
-    img = Image.open(image_path).convert("RGB")
-    draw = ImageDraw.Draw(img, "RGBA")
-    width, height = img.size
-
-    font_size = max(18, width // 28)
-    font = _load_font(font_size)
-    wrapped = textwrap.fill(caption, width=max(20, width // (font_size // 2)))
-    lines = wrapped.split("\n")
-    line_height = int(font_size * 1.3)
-    bar_height = line_height * len(lines) + 24
-
-    draw.rectangle([0, height - bar_height, width, height], fill=(0, 0, 0, 190))
-    y = height - bar_height + 12
-    for line in lines:
-        bbox = draw.textbbox((0, 0), line, font=font)
-        text_width = bbox[2] - bbox[0]
-        draw.text(((width - text_width) / 2, y), line, font=font, fill=(255, 255, 255, 255))
-        y += line_height
-
-    img.save(image_path)
+        return prompt
+    return (
+        f"{prompt}\n\n"
+        f'Include this line directly in the artwork, rendered as a clean, '
+        f'professional comic-book text element: "{caption}". If it is '
+        f"spoken dialogue, use a crisp white speech bubble with a bold black "
+        f"outline and a tail pointing to the speaking character. If it is "
+        f"narration/sound effect rather than dialogue, use a simple "
+        f"rectangular narration caption box in a corner instead. Lettering "
+        f"must be clean, legible, properly sized, and well-composed within "
+        f"the panel -- true comic-book print quality, not sloppy or "
+        f"distorted."
+    )
 
 
 def parallel_trend_search(search_queries: list[str], objective: str) -> dict:
@@ -116,25 +102,26 @@ def generate_panel_image(panel_number: int, prompt: str, caption: str = "") -> d
             via `caption`, which is baked on afterward as a reliable caption
             box (only when text mode is enabled).
         caption: The panel's dialogue/caption text (from the character/scene
-            JSON). Ignored unless text mode (STUDIO_WITH_TEXT=1) is on.
+            JSON). Ignored unless text mode (STUDIO_WITH_TEXT=1) is on --
+            when on, the image model itself renders it as a clean speech
+            bubble or narration box, directly in the artwork.
 
     Returns:
         A dict with "path" (saved image file path) or "error".
     """
     path = OUTPUT_DIR / f"panel_{panel_number:02d}.png"
+    final_prompt = _with_bubble_instructions(prompt, caption) if WITH_TEXT else prompt
 
     if MOCK or not GOOGLE_API_KEY:
-        path.write_text(f"MOCK PLACEHOLDER -- prompt was:\n{prompt}", encoding="utf-8")
+        path.write_text(f"MOCK PLACEHOLDER -- prompt was:\n{final_prompt}", encoding="utf-8")
         return {"path": str(path), "mock": True}
 
     try:
         client = genai.Client(api_key=GOOGLE_API_KEY)
-        response = client.models.generate_content(model=IMAGE_MODEL, contents=prompt)
+        response = client.models.generate_content(model=IMAGE_MODEL, contents=final_prompt)
         for part in response.candidates[0].content.parts:
             if part.inline_data is not None:
                 path.write_bytes(part.inline_data.data)
-                if WITH_TEXT:
-                    _overlay_caption(path, caption)
                 return {"path": str(path)}
         return {"error": "No image data in response (model returned text only)."}
     except Exception as exc:  # noqa: BLE001
