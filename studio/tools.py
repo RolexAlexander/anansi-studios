@@ -85,14 +85,12 @@ def generate_panel_image(panel_number: int, prompt: str) -> dict:
 
     try:
         client = genai.Client(api_key=GOOGLE_API_KEY)
-        result = client.models.generate_images(
-            model=IMAGE_MODEL,
-            prompt=prompt,
-            config={"number_of_images": 1},
-        )
-        image = result.generated_images[0].image
-        image.save(str(path))
-        return {"path": str(path)}
+        response = client.models.generate_content(model=IMAGE_MODEL, contents=prompt)
+        for part in response.candidates[0].content.parts:
+            if part.inline_data is not None:
+                path.write_bytes(part.inline_data.data)
+                return {"path": str(path)}
+        return {"error": "No image data in response (model returned text only)."}
     except Exception as exc:  # noqa: BLE001
         return {"error": str(exc)}
 

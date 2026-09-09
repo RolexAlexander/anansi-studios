@@ -10,7 +10,11 @@ PARALLEL_API_KEY = os.environ.get("PARALLEL_API_KEY", "")
 MOCK = os.environ.get("STUDIO_MOCK", "0") == "1"
 
 TEXT_MODEL = "gemini-flash-latest"
-IMAGE_MODEL = "imagen-3.0-generate-002"
+# Note: plain Gemini Developer API keys (not Vertex AI project auth) don't have
+# access to the separate Imagen `generate_images` endpoint -- confirmed via a
+# live model-list call against this project's key. Using Gemini's native
+# image-generation model via generateContent instead, which this key does have.
+IMAGE_MODEL = "gemini-2.5-flash-image"
 
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "output"
 OUTPUT_DIR.mkdir(exist_ok=True)

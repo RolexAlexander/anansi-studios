@@ -74,11 +74,11 @@ class TestGeneratePanelImage(unittest.TestCase):
         self.assertTrue(result.get("mock"))
 
     def test_real_call_uses_configured_model_and_saves_image(self):
-        fake_image = MagicMock()
-        fake_result = MagicMock()
-        fake_result.generated_images = [MagicMock(image=fake_image)]
+        fake_part = MagicMock(inline_data=MagicMock(data=b"fake-png-bytes"))
+        fake_response = MagicMock()
+        fake_response.candidates = [MagicMock(content=MagicMock(parts=[fake_part]))]
         fake_client = MagicMock()
-        fake_client.models.generate_images.return_value = fake_result
+        fake_client.models.generate_content.return_value = fake_response
 
         with patch.object(tools, "MOCK", False), patch.object(tools, "GOOGLE_API_KEY", "fake-key"), patch(
             "studio.tools.genai.Client", return_value=fake_client
@@ -86,11 +86,23 @@ class TestGeneratePanelImage(unittest.TestCase):
             result = tools.generate_panel_image(2, "a wind spirit racing")
 
         mock_client_cls.assert_called_once_with(api_key="fake-key")
-        fake_client.models.generate_images.assert_called_once()
-        _, kwargs = fake_client.models.generate_images.call_args
+        _, kwargs = fake_client.models.generate_content.call_args
         self.assertEqual(kwargs["model"], tools.IMAGE_MODEL)
-        fake_image.save.assert_called_once()
+        self.assertEqual(kwargs["contents"], "a wind spirit racing")
         self.assertTrue(result["path"].endswith("panel_02.png"))
+
+    def test_real_call_with_no_image_in_response_returns_error(self):
+        fake_part = MagicMock(inline_data=None)
+        fake_response = MagicMock()
+        fake_response.candidates = [MagicMock(content=MagicMock(parts=[fake_part]))]
+        fake_client = MagicMock()
+        fake_client.models.generate_content.return_value = fake_response
+
+        with patch.object(tools, "MOCK", False), patch.object(tools, "GOOGLE_API_KEY", "fake-key"), patch(
+            "studio.tools.genai.Client", return_value=fake_client
+        ):
+            result = tools.generate_panel_image(3, "x")
+        self.assertIn("error", result)
 
     def test_sdk_failure_returns_error_not_crash(self):
         with patch.object(tools, "MOCK", False), patch.object(tools, "GOOGLE_API_KEY", "fake-key"), patch(
