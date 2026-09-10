@@ -6,7 +6,7 @@
 
 **An autonomous multi-agent production company, in a box — built for the [Agentic Cinema hackathon](https://agentic-cinema.devpost.com/), Parallel track.**
 
-**Live on Google Cloud (Cloud Run):** https://anansi-studios-538522341838.us-central1.run.app — deployed via `adk deploy cloud_run`, running the real ADK agent server (verify with `curl .../list-apps` → `["studio"]`).
+**On the deployed hosted URL:** during the hackathon this project was live on Google Cloud Run, verified serving the real ADK agent (`/list-apps` → `["studio"]`). That service has since been **decommissioned** to avoid an unauthenticated public endpoint sitting around unattended after submission. See [`docs/deploy-cloud-run.md`](docs/deploy-cloud-run.md) for a full from-scratch guide to deploying your own instance in a few minutes — no prior Cloud Run experience assumed.
 
 Anansi Studios takes a story seed, writes and critiques a short comic script, generates a comic in an authentic Caribbean folklore voice, "launches" it, and then — using [Parallel](https://parallel.ai)'s live web search — grounds its greenlight-to-movie decision in a *real* trend signal instead of a manually entered popularity number. This repo is the first working slice of a much larger vision: an AI-native studio that discovers, tests, and greenlights Caribbean-rooted IP before a single dollar of real production budget is spent on it.
 
@@ -102,6 +102,8 @@ This is a deliberately honest accounting, not a sales pitch — cut under a real
 - [docs/roadmap.md](docs/roadmap.md) — the full original vision, phase by phase, beyond what's built today.
 - [docs/scope.md](docs/scope.md) and [process-notes.md](process-notes.md) — the unedited planning trail, including the real-time cuts made under the hackathon deadline.
 - [docs/demo-script.md](docs/demo-script.md) / [docs/devpost-submission.md](docs/devpost-submission.md) — submission materials.
+- [docs/final-demo-run.md](docs/final-demo-run.md) — the last pipeline run from the build, with committed sample images.
+- [docs/deploy-cloud-run.md](docs/deploy-cloud-run.md) — full from-scratch guide to deploying your own instance to Google Cloud Run.
 
 ## License
 
