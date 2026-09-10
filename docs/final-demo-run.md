@@ -35,14 +35,26 @@ STUDIO_WITH_TEXT=1 python main.py "La Diablesse walks the midnight road in a bea
 
 ## Result
 
-| File | Description |
-|---|---|
-| [panel_01.png](../assets/sample-output/panel_01.png) | Opening panel -- La Diablesse on the midnight road |
-| [panel_02.png](../assets/sample-output/panel_02.png) | The traveler encounters her, warning signs begin |
-| [panel_03.png](../assets/sample-output/panel_03.png) | Escalation |
-| [panel_04.png](../assets/sample-output/panel_04.png) | The turn/reveal |
-| [panel_05.png](../assets/sample-output/panel_05.png) | Final beat |
-| [comic_page.png](../assets/sample-output/comic_page.png) | All five panels combined into one page |
+**All five panels combined into one page:**
+
+![Combined comic page -- La Diablesse](../assets/sample-output/comic_page.png)
+
+**Panel by panel:**
+
+![Panel 1 -- La Diablesse on the midnight road](../assets/sample-output/panel_01.png)
+*Panel 1 -- Opening: La Diablesse on the midnight road.*
+
+![Panel 2 -- the traveler encounters her](../assets/sample-output/panel_02.png)
+*Panel 2 -- The traveler encounters her, warning signs begin.*
+
+![Panel 3 -- escalation](../assets/sample-output/panel_03.png)
+*Panel 3 -- Escalation.*
+
+![Panel 4 -- the turn](../assets/sample-output/panel_04.png)
+*Panel 4 -- The turn/reveal.*
+
+![Panel 5 -- final beat](../assets/sample-output/panel_05.png)
+*Panel 5 -- Final beat.*
 
 ## Honest gap in this record
 
